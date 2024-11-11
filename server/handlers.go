@@ -5,7 +5,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
-	"github.com/vicentebravocabezas/streamingUIDE/server/web/templates"
+	"github.com/vicentebravocabezas/streamingUIDE/web/templates"
 )
 
 func render(c echo.Context, statusCode int, t templ.Component) error {
