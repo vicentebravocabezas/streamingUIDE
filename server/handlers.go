@@ -5,6 +5,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
+	"github.com/vicentebravocabezas/streamingUIDE/database"
 	"github.com/vicentebravocabezas/streamingUIDE/web/templates"
 )
 
@@ -21,4 +22,9 @@ func render(c echo.Context, statusCode int, t templ.Component) error {
 
 func index(c echo.Context) error {
 	return render(c, http.StatusOK, templates.Index())
+}
+
+func jsonTest(c echo.Context) error {
+	database.User()
+	return c.JSON(http.StatusOK, "")
 }
