@@ -16,7 +16,7 @@ var (
 func OpenDB() *sql.DB {
 	once.Do(func() {
 		var err error
-		db, err = sql.Open("libsql", "file:database/local/db.sqlite3")
+		db, err = sql.Open("libsql", "file:./database/local/db.sqlite3")
 		if err != nil {
 			log.Fatal(err)
 		}
