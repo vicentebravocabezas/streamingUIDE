@@ -53,3 +53,18 @@ func ReadUserFromCookies(c echo.Context) (user, error) {
 
 	return user, nil
 }
+
+func Logout(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return fmt.Errorf("cookie session not obtainable: %v", err)
+	}
+
+	sess.Options.MaxAge = -1
+
+	if err := sess.Save(c.Request(), c.Response()); err != nil {
+		return err
+	}
+
+	return nil
+}

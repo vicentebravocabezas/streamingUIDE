@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
@@ -67,6 +68,9 @@ func (u *newuser) StoreInDB() error {
 	}
 
 	if _, err := database.OpenDB().Exec("INSERT INTO users VALUES (?, ?, ?)", u.username, string(u.hashedPassword), u.email); err != nil {
+		if strings.Contains(err.Error(), "UNIQUE constraint failed") {
+			return errors.New("usuario ya se encuentra registrado")
+		}
 		return err
 	}
 

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/a-h/templ"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -11,8 +12,10 @@ import (
 )
 
 func RegisterMiddleware(e *echo.Echo) {
+	//middleware para establecer manejo de cookies
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(os.Getenv("SESSIONKEY")))))
 
+	//middleware para control de cache
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Response().Header().Add("Cache-Control", "no-cache")
@@ -22,6 +25,7 @@ func RegisterMiddleware(e *echo.Echo) {
 		}
 	})
 
+	//middleware para autenticacion por cookies
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 
@@ -43,14 +47,16 @@ func RegisterMiddleware(e *echo.Echo) {
 func RegisterRoutes(e *echo.Echo) {
 	e.GET("/", index)
 
+	//rutas para autenticacion y registro de usuario
 	e.GET("/signup", signup)
+
+	e.POST("/signup", registerUser)
 
 	e.GET("/login", loginScreen)
 
 	e.POST("/login", login)
 
-	// ruta para insertar usuario
-	e.GET("/insert-user", insertUser)
+	e.GET("/logout", logout)
 
 	//ruta para borrar usuario
 	e.GET("/delete-user", deleteUser)
@@ -61,4 +67,15 @@ func RegisterRoutes(e *echo.Echo) {
 	e.GET("/media", mediaList)
 
 	e.Static("/public", "web/assets/public")
+}
+
+func render(c echo.Context, statusCode int, t templ.Component) error {
+	buf := templ.GetBuffer()
+	defer templ.ReleaseBuffer(buf)
+
+	if err := t.Render(c.Request().Context(), buf); err != nil {
+		return err
+	}
+
+	return c.HTML(statusCode, buf.String())
 }

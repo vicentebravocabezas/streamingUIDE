@@ -2,26 +2,14 @@ package server
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
-	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/vicentebravocabezas/streamingUIDE/server/authentication"
 	"github.com/vicentebravocabezas/streamingUIDE/server/media"
 	"github.com/vicentebravocabezas/streamingUIDE/web/templates"
-	"github.com/vicentebravocabezas/streamingUIDE/web/templates/stream"
 )
-
-func render(c echo.Context, statusCode int, t templ.Component) error {
-	buf := templ.GetBuffer()
-	defer templ.ReleaseBuffer(buf)
-
-	if err := t.Render(c.Request().Context(), buf); err != nil {
-		return err
-	}
-
-	return c.HTML(statusCode, buf.String())
-}
 
 func index(c echo.Context) error {
 	user, err := authentication.ReadUserFromCookies(c)
@@ -54,25 +42,30 @@ func login(c echo.Context) error {
 	return c.Redirect(http.StatusSeeOther, "/stream")
 }
 
-func streamPage(c echo.Context) error {
-	return render(c, http.StatusOK, templates.Layout(stream.Stream()))
+func signup(c echo.Context) error {
+	return render(c, http.StatusOK, templates.Layout(templates.SignUp(nil)))
 }
 
-func signup(c echo.Context) error {
-	return render(c, http.StatusOK, templates.Layout(templates.SignUp()))
+func logout(c echo.Context) error {
+	if err := authentication.Logout(c); err != nil {
+		return err
+	}
+
+	return c.Redirect(http.StatusSeeOther, "/login")
 }
 
 // control para registrar usuario
-func insertUser(c echo.Context) error {
+func registerUser(c echo.Context) error {
 	username := c.FormValue("username")
 	password := c.FormValue("password")
 	email := c.FormValue("email")
 
 	user := authentication.CreateUser(username, password, email)
-	user.StoreInDB()
+	if err := user.StoreInDB(); err != nil {
+		return render(c, http.StatusOK, templates.Layout(templates.SignUp(fmt.Errorf("Error: %v", err))))
+	}
 
-	users := authentication.QueryUsers()
-	return c.JSON(http.StatusOK, users)
+	return c.Redirect(http.StatusSeeOther, "/login")
 }
 
 // control para borrar usuario

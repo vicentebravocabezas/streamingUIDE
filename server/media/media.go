@@ -14,6 +14,28 @@ type Media struct {
 	Source      string
 }
 
+func GetMedia(id string) (*Media, error) {
+	row := database.OpenDB().QueryRow("SELECT media.*, media_types.media_type FROM media LEFT JOIN media_types ON media.media_type_id = media_types.media_type_id WHERE media.media_id = ?", id)
+
+	var resultid int
+	var title string
+	var description string
+	var media_type_id int
+	var source string
+	var media_type string
+	if err := row.Scan(&resultid, &title, &description, &media_type_id, &source, &media_type); err != nil {
+		return nil, err
+	}
+
+	return &Media{
+		Id:          resultid,
+		Title:       title,
+		Description: description,
+		MediaType:   media_type,
+		Source:      source,
+	}, nil
+}
+
 // lista de multimedia registrada en la base de datos
 func MediaList() ([]Media, error) {
 	// ejecutar consulta SQL
