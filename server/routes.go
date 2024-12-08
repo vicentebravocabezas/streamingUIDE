@@ -15,9 +15,24 @@ func RegisterMiddleware(e *echo.Echo) {
 
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
+			c.Response().Header().Add("Cache-Control", "no-cache")
+			c.Response().Header().Add("Cache-Control", "private")
 
-			if _, err := authentication.ReadUserFromCookies(c); err != nil && c.Path() == "/media" {
-				return c.Redirect(http.StatusPermanentRedirect, "/login")
+			return next(c)
+		}
+	})
+
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+
+			user, err := authentication.ReadUserFromCookies(c)
+			if err != nil && c.Path() == "/stream" {
+				return c.Redirect(http.StatusSeeOther, "/login")
+			}
+
+			authorized, _ := user.Login(c)
+			if !authorized && c.Path() == "/stream" {
+				return c.Redirect(http.StatusSeeOther, "/login")
 			}
 
 			return next(c)

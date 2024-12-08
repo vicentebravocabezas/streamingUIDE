@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/a-h/templ"
@@ -22,13 +23,21 @@ func render(c echo.Context, statusCode int, t templ.Component) error {
 	return c.HTML(statusCode, buf.String())
 }
 
-// TODO: implementar pagina de inicio
 func index(c echo.Context) error {
-	return render(c, http.StatusOK, templates.Layout(templates.Login(false)))
+	user, err := authentication.ReadUserFromCookies(c)
+	if err != nil {
+		return c.Redirect(http.StatusSeeOther, "/login")
+	}
+
+	if authorized, _ := user.Login(c); !authorized {
+		return c.Redirect(http.StatusSeeOther, "/login")
+	}
+
+	return c.Redirect(http.StatusSeeOther, "/stream")
 }
 
 func loginScreen(c echo.Context) error {
-	return render(c, http.StatusOK, templates.Layout(templates.Login(false)))
+	return render(c, http.StatusOK, templates.Layout(templates.Login(nil)))
 }
 
 func login(c echo.Context) error {
@@ -39,7 +48,7 @@ func login(c echo.Context) error {
 	}
 
 	if !authorized {
-		return render(c, http.StatusOK, templates.Layout(templates.Login(true)))
+		return render(c, http.StatusOK, templates.Layout(templates.Login(errors.New("Las credenciales no son correctas. Intente de nuevo."))))
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/stream")
@@ -55,9 +64,9 @@ func signup(c echo.Context) error {
 
 // control para registrar usuario
 func insertUser(c echo.Context) error {
-	username := c.QueryParam("username")
-	password := c.QueryParam("password")
-	email := c.QueryParam("email")
+	username := c.FormValue("username")
+	password := c.FormValue("password")
+	email := c.FormValue("email")
 
 	user := authentication.CreateUser(username, password, email)
 	user.StoreInDB()

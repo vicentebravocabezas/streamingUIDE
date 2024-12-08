@@ -18,11 +18,11 @@ templ Layout(mainContent templ.Component) {
 	</html>
 }
 
-templ Login(failedLogin bool) {
+templ Login(err error) {
 	<div class="border w-full max-w-md p-4 bg-white rounded-lg shadow-lg m-auto">
 		<div class="flex flex-col justify-self-center p-6 text-center space-y-2">
-			if failedLogin {
-				<p class="text-sm text-red-700">Las credenciales no son correctas. Intente de nuevo</p>
+			if err != nil {
+				<p class="text-sm text-red-700">{ err.Error() }</p>
 			}
 			<h3 class="text-3xl font-bold">Ingresar</h3>
 			<p class="text-sm text-gray-500">Ingrese sus credenciales</p>
