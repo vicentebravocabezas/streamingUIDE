@@ -1,16 +1,62 @@
 package templates
 
-templ Index() {
+templ Layout(mainContent templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<title>Streaming Service UIDE</title>
-			<link href="css/style.css" rel="stylesheet"/>
+			<link href="/public/app.css" rel="stylesheet"/>
 		</head>
-		<body>
-			Hello World!
+		<body class="">
+			<div class="flex flex-col h-dvh p-4 items-center">
+				<h1 class="mt-4 mx-auto font-light text-4xl">Streaming UIDE</h1>
+				@mainContent
+			</div>
 		</body>
 	</html>
+}
+
+templ Login(failedLogin bool) {
+	<div class="border w-full max-w-md p-4 bg-white rounded-lg shadow-lg m-auto">
+		<div class="flex flex-col justify-self-center p-6 text-center space-y-2">
+			if failedLogin {
+				<p class="text-sm text-red-700">Las credenciales no son correctas. Intente de nuevo</p>
+			}
+			<h3 class="text-3xl font-bold">Ingresar</h3>
+			<p class="text-sm text-gray-500">Ingrese sus credenciales</p>
+			<form action="login" method="post" class="flex flex-col pt-6">
+				<label for="username" class="text-left font-medium">Usuario</label>
+				<input type="text" id="username" name="username" required/>
+				<label for="password" class="text-left font-medium mt-4">Contraseña</label>
+				<input type="password" id="password" name="password" required/>
+				<div class="flex space-x-3">
+					<a href="/signup" class="cursor-pointer px-4 py-2 mt-8 bg-red-800 text-white w-fit self-center rounded font-medium hover:bg-red-700 focus:bg-zinc-600 shadow transition-all">Registrarse</a>
+					<button type="submit" class="cursor-pointer px-4 py-2 mt-8 bg-black text-white w-fit self-center rounded font-medium hover:bg-zinc-800 focus:bg-zinc-600 shadow transition-all">Ingresar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+}
+
+templ SignUp() {
+	<div class="border w-full max-w-md p-4 bg-white rounded-lg shadow-lg m-auto">
+		<div class="flex flex-col justify-self-center p-6 text-center space-y-2">
+			<h3 class="text-3xl font-bold">Registrarse</h3>
+			<p class="text-sm text-gray-500">Ingrese sus datos</p>
+			<form method="post" class="flex flex-col pt-6">
+				<label for="email" class="text-left font-medium" required>Email</label>
+				<input type="email" id="email" name="email"/>
+				<label for="username" class="text-left font-medium mt-4" required>Usuario</label>
+				<input type="text" id="username" name="username"/>
+				<label for="pass" class="text-left font-medium mt-4">Contraseña</label>
+				<input type="password" id="password" name="password" required/>
+				<div class="flex space-x-3">
+					<a href="/" class="cursor-pointer px-4 py-2 mt-8 bg-black text-white w-fit self-center rounded font-medium hover:bg-zinc-800 focus:bg-zinc-600 shadow transition-all">Volver</a>
+					<button type="submit" class="cursor-pointer px-4 py-2 mt-8 bg-black text-white w-fit self-center rounded font-medium hover:bg-zinc-800 focus:bg-zinc-600 shadow transition-all">Registrarse</button>
+				</div>
+			</form>
+		</div>
+	</div>
 }
