@@ -19,20 +19,31 @@ templ Stream(user string, component templ.Component) {
 templ MediaList(list []media.Media) {
 	<div class="flex mt-12 space-x-5 space-y-3">
 		for _, v := range list {
-			<a href={ templ.URL(fmt.Sprintf("/stream?id=%v", v.Id)) } class="px-10 max-w-90 py-8 border border-stone-300 rounded transition-all hover:bg-stone-100 shadow">
-				<h3 class="text-xl">{ v.Title }</h3>
-				<div class="mt-2">{ v.Description }</div>
-				<div class="text-sm font-bold mt-4">{ v.MediaType }</div>
+			<a href={ templ.URL(fmt.Sprintf("/stream?id=%v&media-type=%v", v.Id(), v.MediaType())) } class="px-10 max-w-90 py-8 border border-stone-300 rounded transition-all hover:bg-stone-100 shadow">
+				<h3 class="text-xl">{ v.Title() }</h3>
+				if v.MediaType() == "Movie" {
+					<div class="mt-2">{ v.Description() }</div>
+				} else if v.MediaType() == "Music" {
+					<div class="mt-2">{ v.Artist() }</div>
+					<div class="mt-2">{ v.Album() }</div>
+				}
+				<div class="text-sm font-bold mt-4">{ v.MediaType() }</div>
 			</a>
 		}
 	</div>
 }
 
-templ Play(media *media.Media) {
+templ Play(media media.Media) {
 	<div class="mt-10">
-		<h2 class="text-4xl">{ media.Title }</h2>
-		<video class="mt-8" width="854" height="480" controls>
-			<source src={ media.Source } type="video/mp4"/>
-		</video>
+		<h2 class="text-4xl">{ media.Title() }</h2>
+		if media.MediaType() == "Movie" {
+			<video class="mt-8" width="854" height="480" controls>
+				<source src={ media.Source() } type="video/mp4"/>
+			</video>
+		} else if media.MediaType() == "Music" {
+			<audio class="mt-8" controls>
+				<source src={ media.Source() } type="audio/mpeg"/>
+			</audio>
+		}
 	</div>
 }

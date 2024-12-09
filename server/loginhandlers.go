@@ -83,7 +83,7 @@ func deleteUser(c echo.Context) error {
 
 // control para lista de multimedia registrada
 func mediaList(c echo.Context) error {
-	list, err := media.MediaList()
+	list, err := media.MovieList()
 	if err != nil {
 		return err
 	}

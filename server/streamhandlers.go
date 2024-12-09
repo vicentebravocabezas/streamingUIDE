@@ -18,6 +18,7 @@ func streamPage(c echo.Context) error {
 	}
 
 	mediaId := c.QueryParam("id")
+	mediaType := c.QueryParam("media-type")
 
 	var component templ.Component
 
@@ -31,7 +32,7 @@ func streamPage(c echo.Context) error {
 	}
 
 	if mediaId != "" {
-		media, err := media.GetMedia(mediaId)
+		media, err := media.GetMedia(mediaId, mediaType)
 		if err != nil {
 			return err
 		}
