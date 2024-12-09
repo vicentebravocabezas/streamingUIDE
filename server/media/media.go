@@ -12,8 +12,10 @@ type Media interface {
 
 	Description() string
 
+	// si es una pelicula, "Movie", o una canción, "Music"
 	MediaType() string
 
+	//url del archivo
 	Source() string
 
 	Artist() string
