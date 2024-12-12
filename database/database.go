@@ -13,11 +13,19 @@ var (
 	db   *sql.DB
 )
 
-func OpenDB() *sql.DB {
+func init() {
+	DB()
+}
+
+func DB() *sql.DB {
 	once.Do(func() {
 		var err error
 		db, err = sql.Open("libsql", "file:./database/local/db.sqlite3")
 		if err != nil {
+			log.Fatal(err)
+		}
+
+		if err := db.Ping(); err != nil {
 			log.Fatal(err)
 		}
 	})

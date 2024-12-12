@@ -12,7 +12,7 @@ type music struct {
 }
 
 func GetMusic(id string) (Media, error) {
-	row := database.OpenDB().QueryRow(
+	row := database.DB().QueryRow(
 		`SELECT media.media_id, media.title, media.artist, media.album, media.media_type_id, media.source, media_types.media_type 
 FROM media
 LEFT JOIN media_types ON media.media_type_id = media_types.media_type_id
@@ -43,7 +43,7 @@ WHERE media.media_id = ?`, id,
 // lista de multimedia registrada en la base de datos
 func MusicList() ([]Media, error) {
 	// ejecutar consulta SQL
-	rows, err := database.OpenDB().Query(
+	rows, err := database.DB().Query(
 		`SELECT media.media_id, media.title, media.artist, media.album, media.media_type_id, media.source, media_types.media_type 
 FROM media 
 LEFT JOIN media_types ON media.media_type_id = media_types.media_type_id

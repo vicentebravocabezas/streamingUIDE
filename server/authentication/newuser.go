@@ -22,7 +22,7 @@ type newuser struct {
 }
 
 func QueryUsers() []newuser {
-	row, err := database.OpenDB().Query("SELECT * FROM users")
+	row, err := database.DB().Query("SELECT * FROM users")
 	if err != nil {
 		log.Println(err)
 	}
@@ -46,7 +46,7 @@ func QueryUsers() []newuser {
 
 // metodo para borrar usuario
 func (u *newuser) DeleteFromDB() error {
-	result, err := database.OpenDB().Exec("DELETE FROM users WHERE username = ?", u.username)
+	result, err := database.DB().Exec("DELETE FROM users WHERE username = ?", u.username)
 	if err != nil {
 		return fmt.Errorf("could not delete user: %v", err)
 	}
@@ -67,7 +67,7 @@ func (u *newuser) StoreInDB() error {
 		fmt.Println(err)
 	}
 
-	if _, err := database.OpenDB().Exec("INSERT INTO users VALUES (?, ?, ?)", u.username, string(u.hashedPassword), u.email); err != nil {
+	if _, err := database.DB().Exec("INSERT INTO users VALUES (?, ?, ?)", u.username, string(u.hashedPassword), u.email); err != nil {
 		if strings.Contains(err.Error(), "UNIQUE constraint failed") {
 			return errors.New("usuario ya se encuentra registrado")
 		}
@@ -101,7 +101,7 @@ func (u *newuser) Login(c echo.Context) (bool, error) {
 }
 
 func (u *newuser) queryHashedPassword() string {
-	row := database.OpenDB().QueryRow(`SELECT password FROM users WHERE username = ?`, u.username)
+	row := database.DB().QueryRow(`SELECT password FROM users WHERE username = ?`, u.username)
 
 	var hashedPassword string
 

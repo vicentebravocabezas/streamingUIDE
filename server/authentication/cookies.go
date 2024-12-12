@@ -35,7 +35,7 @@ func (u *userFromCookies) StoreInDB() error {
 }
 
 func (u *userFromCookies) checkUserInDB() (bool, error) {
-	row := database.OpenDB().QueryRow("SELECT username FROM users WHERE username = ?", u.username)
+	row := database.DB().QueryRow("SELECT username FROM users WHERE username = ?", u.username)
 	var username string
 	row.Scan(&username)
 
