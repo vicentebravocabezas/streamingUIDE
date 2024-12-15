@@ -14,8 +14,8 @@ var (
 	dbFile = "file:./database/local/db.sqlite3"
 )
 
-// esta función solo debe usarse para testing, al llamarse, se cerrara cualquier conexión a una DB
-// y los siguientes llamados a DB() utilizaran la nueva ruta de la base de datos
+// esta función solo debe usarse para testing. Al llamarse, se cerrará cualquier conexión a una DB.
+// Los siguientes llamados a DB() utilizarán la nueva ruta de la base de datos
 func SetDBFile(dbPath string) {
 	if db != nil {
 		db.Close()

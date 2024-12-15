@@ -1,9 +1,5 @@
 # Servicio Streaming UIDE
 
-## VIDEO EXPLICATIVO PARA AUTONOMO 2 EN REPOSITORIO
-
-Aplicación web para servicio de Streaming.
-
 ## Instalación
 
 Instalar [templ](https://templ.guide/) utilizando el comando
