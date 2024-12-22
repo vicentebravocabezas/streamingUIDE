@@ -1,0 +1,79 @@
+package templates
+
+templ Layout(mainContent templ.Component) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>Streaming Service UIDE</title>
+			<link href="/public/app.css" rel="stylesheet"/>
+		</head>
+		<body>
+			@mainContent
+		</body>
+	</html>
+}
+
+templ Login(err error) {
+	<div class="flex h-dvh flex-col items-center p-4">
+		<div class="m-auto w-full max-w-md rounded-lg border bg-white p-4 shadow-lg">
+			<div class="bottom-2 flex min-w-full"></div>
+			<div class="flex flex-col space-y-2 justify-self-center p-6 text-center">
+				if err != nil {
+					<p class="text-sm text-red-700">{ err.Error() }</p>
+				}
+				<h3 class="text-3xl font-bold">Ingresar</h3>
+				<p class="text-sm text-gray-500">Ingrese sus credenciales</p>
+				<form action="login" method="post" class="flex flex-col pt-6">
+					<label for="username" class="text-left font-medium">Usuario</label>
+					<input type="text" id="username" name="username" required/>
+					<label for="password" class="mt-4 text-left font-medium">Contraseña</label>
+					<input type="password" id="password" name="password" required/>
+					<div class="flex space-x-3">
+						<a
+							href="/signup"
+							class="mt-8 w-fit cursor-pointer self-center rounded bg-red-800 px-4 py-2 font-medium text-white shadow transition-all hover:bg-red-700 focus:bg-zinc-600"
+						>Registrarse</a>
+						<button
+							type="submit"
+							class="mt-8 w-fit cursor-pointer self-center rounded bg-black px-4 py-2 font-medium text-white shadow transition-all hover:bg-zinc-800 focus:bg-zinc-600"
+						>Ingresar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+}
+
+templ SignUp(err error) {
+	<div class="flex h-dvh flex-col items-center p-4">
+		<div class="m-auto w-full max-w-md rounded-lg border bg-white p-4 shadow-lg">
+			<div class="flex flex-col space-y-2 justify-self-center p-6 text-center">
+				if err != nil {
+					<p class="text-sm text-red-700">{ err.Error() }</p>
+				}
+				<h3 class="text-3xl font-bold">Registrarse</h3>
+				<p class="text-sm text-gray-500">Ingrese sus datos</p>
+				<form method="post" class="flex flex-col pt-6">
+					<label for="email" class="text-left font-medium" required>Email</label>
+					<input type="email" id="email" name="email"/>
+					<label for="username" class="mt-4 text-left font-medium" required>Usuario</label>
+					<input type="text" id="username" name="username"/>
+					<label for="pass" class="mt-4 text-left font-medium">Contraseña</label>
+					<input type="password" id="password" name="password" required/>
+					<div class="flex space-x-3">
+						<a
+							href="/"
+							class="mt-8 w-fit cursor-pointer self-center rounded bg-black px-4 py-2 font-medium text-white shadow transition-all hover:bg-zinc-800 focus:bg-zinc-600"
+						>Volver</a>
+						<button
+							type="submit"
+							class="mt-8 w-fit cursor-pointer self-center rounded bg-black px-4 py-2 font-medium text-white shadow transition-all hover:bg-zinc-800 focus:bg-zinc-600"
+						>Registrarse</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+}

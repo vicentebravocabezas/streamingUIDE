@@ -1,0 +1,55 @@
+package stream
+
+import "fmt"
+import "github.com/vicentebravocabezas/streamingUIDE/microservices/shared"
+
+templ Stream(user string, component templ.Component) {
+	<div class="flex h-dvh flex-col items-center">
+		<nav class="sticky top-0 flex w-full items-center justify-between border-b border-stone-300 shadow">
+			<div class="pl-5 font-bold">Hola, { user }!</div>
+			<a href="/logout" class="bg-stone-300 px-5 py-2 font-bold text-black transition-all hover:bg-stone-200">Salir</a>
+		</nav>
+		<a href="/stream" class="mt-8 text-4xl font-light hover:text-amber-700">Streaming UIDE</a>
+		if component != nil {
+			@component
+		}
+	</div>
+}
+
+templ MediaList(list []shared.MediaGlobalType) {
+	<div class="mt-12 flex space-x-5 space-y-3">
+		for _, v := range list {
+			<a href={ templ.URL(fmt.Sprintf("/stream?id=%v&media-type=%v", v.GetId(), v.GetMediaType())) } class="max-w-90 group rounded border border-stone-300 px-10 py-8 shadow transition-all hover:border-amber-500">
+				<h3 class="text-xl group-hover:text-amber-700">{ v.GetTitle() }</h3>
+				if v.GetMediaType() == "Movie" {
+					<div class="mt-2">{ v.GetDescription() }</div>
+				} else if v.GetMediaType() == "Music" {
+					<div class="mt-2">{ v.GetArtist() }</div>
+					<div class="mt-2">{ v.GetAlbum() }</div>
+				}
+				<div class="mt-4 text-sm font-bold">{ v.GetMediaType() }</div>
+			</a>
+		}
+	</div>
+}
+
+templ Play(media shared.MediaGlobalType) {
+	<div class="mt-10">
+		<h2 class="text-4xl">{ media.GetTitle() }</h2>
+		if media.GetMediaType() == "Movie" {
+			<video class="mt-8" width="854" height="480" controls>
+				<source src={ media.GetSource() } type="video/mp4"/>
+			</video>
+			<div>
+				<p class="mt-4 text-lg font-bold">Descripción:</p>
+				<p>{ media.GetDescription() }</p>
+			</div>
+		} else if media.GetMediaType() == "Music" {
+			<p class="mt-4 text-lg">{ media.GetArtist() }</p>
+			<p class="mt-4 font-medium">{ media.GetAlbum() }</p>
+			<audio class="mt-8 w-[854px]" controls>
+				<source src={ media.GetSource() } type="audio/mpeg"/>
+			</audio>
+		}
+	</div>
+}
