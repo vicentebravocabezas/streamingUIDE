@@ -52,7 +52,7 @@ WHERE media.media_id = ? AND media_types.media_type = 'Movie'`, id).JSONReader()
 func MovieList() ([]Media, error) {
 	// ejecutar consulta SQL
 	query := ConstructQuery(
-		`SELECT media.media_id, media.title, media.description, media.media_type_id, media.source, media_types.media_type 
+		`SELECT media.media_id, media.title, media.description, media_types.media_type 
 FROM media 
 LEFT JOIN media_types ON media.media_type_id = media_types.media_type_id
 WHERE media_types.media_type = 'Movie'`,
@@ -84,7 +84,7 @@ WHERE media_types.media_type = 'Movie'`,
 			Title:       v["title"].(string),
 			Description: v["description"].(string),
 			MediaType:   v["media_type"].(string),
-			Source:      v["source"].(string),
+			Source:      "",
 		})
 	}
 
