@@ -1,0 +1,13 @@
+go 1.23.4
+
+use (
+	./microservices/authentication
+	./microservices/database
+	./microservices/frontend
+	./microservices/medialist
+	./microservices/movie
+	./microservices/passwordhashing
+	./microservices/registration
+	./microservices/shared
+	./microservices/song
+)
