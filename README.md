@@ -7,7 +7,7 @@ El proyecto consiste en un servicio de streaming de películas y canciones para 
 El alcance del proyecto comprende las siguientes funcionalidades programadas en los módulos en la carpeta `microservices` especificados a continuación:
 - `authentication`: servicio Web para manejar autenticación al servidor
 - `database`: servicio para manejar conexión a la base de datos. Todas las interacciones con la DB pasan por este servicio
-- `frontend`: servicio que ofrece el frontend al usuario. Se comunica con los otros servicios a través de JSON pero devuelve HTML al usuario. Utiliza plantillas escritas en [templ](https://templ.guide/), un DSL creado para Go
+- `frontend`: servicio que ofrece el frontend al usuario. Se comunica con los otros servicios a través de JSON pero devuelve HTML al usuario. Utiliza plantillas escritas en [templ](https://templ.guide/), un DSL creado para Go. El estilado fue realizado con [Tailwind CSS](https://tailwindcss.com/)
 - `medialist`: servicio que obtiene la lista de las películas disponibles
 - `movie`: servicio que obtiene los datos y la fuente de una película específica
 - `passwordhashing`: servicio que se encarga de generar hashing de contraseñas y verificación de hashes para posterior autenticación
