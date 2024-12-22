@@ -8,7 +8,11 @@ import (
 
 func ExecuteQueryNoRows(query *shared.DatabaseQuery) (bool, error) {
 	result, err := DB().Exec(query.SqlStatement, query.Args...)
-	rowsAffected, _ := result.RowsAffected()
+	if err != nil {
+		return false, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return false, err
 	}

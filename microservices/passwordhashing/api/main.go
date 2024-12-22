@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -28,7 +29,7 @@ func main() {
 
 		hashBytes, err := bcrypt.GenerateFromPassword([]byte(user.GetPassword()), bcrypt.DefaultCost)
 		if err != nil {
-			return err
+			return c.JSON(http.StatusInternalServerError, map[string]string{"message": fmt.Sprintf("error generating hash: %v", err)})
 		}
 
 		return c.JSON(http.StatusOK, map[string]string{"hash": string(hashBytes)})
